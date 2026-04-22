@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nehal Sarwar — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a08;
+    --bg2: #111110;
+    --bg3: #1a1a17;
+    --cream: #f0ead6;
+    --cream-dim: #c8bfa8;
+    --gold: #c9a84c;
+    --gold-dim: #8a6f34;
+    --red: #c44a2f;
+    --white: #faf8f2;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Cormorant Garamond', serif;
+    --display: 'Bebas Neue', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  img { max-width: 100%; height: auto; display: block; }
+
+  /* Custom cursor — only on devices with fine pointer */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor.expand { width: 40px; height: 40px; background: rgba(201,168,76,0.3); }
+
+  /* Disable custom cursor on touch/coarse-pointer devices */
+  @media (hover: none), (pointer: coarse) {
+    body { cursor: auto; }
+    .cursor { display: none; }
+    .filter-btn, .card-expand, .project-card, .modal-close { cursor: pointer; }
+    a, button { cursor: pointer; }
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+  }
+
+  /* ─── HERO ─────────────────────────────────────── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 8vw 8vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-line {
+    position: absolute;
+    top: 0; left: 8vw; right: 8vw;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    animation: lineIn 2s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes lineIn {
+    from { opacity: 0; transform: scaleX(0); }
+    to   { opacity: 1; transform: scaleX(1); }
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s ease forwards;
+  }
+
+  .hero-name {
+    font-family: var(--display);
+    font-size: clamp(3.5rem, 14vw, 14rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.5s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-name span { color: var(--gold); }
+
+  .hero-sub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.6rem);
+    color: var(--cream-dim);
+    margin-top: 1.5rem;
+    max-width: 600px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.1s ease forwards;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-meta-item { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--cream-dim); text-transform: uppercase; }
+  .hero-meta-item strong { display: block; color: var(--cream); font-size: 0.7rem; margin-top: 0.2rem; font-weight: 500; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 4vh; right: 8vw;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.5s ease forwards;
+  }
+
+  .hero-number {
+    position: absolute;
+    top: 50%; right: 8vw;
+    transform: translateY(-50%);
+    font-family: var(--display);
+    font-size: clamp(6rem, 18vw, 22rem);
+    color: rgba(201,168,76,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── NAV ──────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 2rem 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: normal;
+  }
+
+  nav::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,8,0.9), transparent);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--cream-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* Hamburger button - hidden on desktop */
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 0.55rem 0.7rem;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: var(--gold);
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+  /* ─── SECTION SHARED ───────────────────────────── */
+  section { padding: 10vh 8vw; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+    margin: 6vh 0;
+    opacity: 0.4;
+  }
+
+  /* ─── ABOUT ────────────────────────────────────── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6vw;
+    align-items: start;
+  }
+
+  .about-left .section-title { margin-bottom: 2rem; }
+
+  .about-text {
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    color: var(--cream-dim);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .about-text p + p { margin-top: 1.2rem; }
+
+  .about-right { padding-top: 5rem; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .stat {
+    border-top: 1px solid var(--gold-dim);
+    padding-top: 1rem;
+  }
+
+  .stat-number {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .career-goal {
+    margin-top: 3rem;
+    padding: 2rem;
+    border: 1px solid rgba(201,168,76,0.2);
+    position: relative;
+  }
+
+  .career-goal::before {
+    content: '"';
+    font-family: var(--display);
+    font-size: 8rem;
+    color: rgba(201,168,76,0.08);
+    position: absolute;
+    top: -2rem; left: 1rem;
+    line-height: 1;
+  }
+
+  .career-goal p {
+    font-size: 1rem;
+    color: var(--cream-dim);
+    font-style: italic;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── PROJECTS ─────────────────────────────────── */
+  #projects { padding-top: 4vh; }
+
+  .projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 6vh;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(201,168,76,0.3);
+    background: transparent;
+    color: var(--cream-dim);
+    cursor: none;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+
+  /* Project Grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--bg2);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: background 0.3s;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .project-card:hover { background: var(--bg3); border-color: rgba(201,168,76,0.15); }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-card.hidden { display: none; }
+
+  /* Project image area */
+  .card-media {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg3);
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease, filter 0.4s ease;
+    filter: saturate(0.9) brightness(0.95);
+  }
+  .project-card:hover .card-media img {
+    transform: scale(1.04);
+    filter: saturate(1) brightness(1);
+  }
+
+  /* Placeholder when a project has no image */
+  .card-media.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      linear-gradient(135deg, rgba(201,168,76,0.04), transparent 60%),
+      repeating-linear-gradient(45deg, rgba(201,168,76,0.02) 0 2px, transparent 2px 14px),
+      var(--bg3);
+  }
+  .card-media.placeholder .ph-num {
+    font-family: var(--display);
+    font-size: clamp(5rem, 9vw, 9rem);
+    color: rgba(201,168,76,0.18);
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+
+  .card-body { padding: 2rem 2rem 2.25rem; position: relative; flex: 1; display: flex; flex-direction: column; }
+
+  .card-number {
+    font-family: var(--display);
+    font-size: 4rem;
+    color: rgba(201,168,76,0.08);
+    line-height: 1;
+    position: absolute;
+    top: 0.8rem; right: 1.2rem;
+    transition: color 0.3s;
+    pointer-events: none;
+  }
+
+  .project-card:hover .card-number { color: rgba(201,168,76,0.16); }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .tag.type { background: rgba(196,74,47,0.1); color: #e07a60; border-color: rgba(196,74,47,0.2); }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+  }
+
+  .card-course {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--cream-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+    line-height: 1.65;
+    font-style: italic;
+    flex: 1;
+  }
+
+  .card-expand {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    cursor: none;
+    border: none;
+    background: none;
+    padding: 0;
+    align-self: flex-start;
+  }
+
+  .card-expand::after {
+    content: '→';
+    transition: transform 0.2s;
+  }
+
+  .project-card:hover .card-expand {
+    color: var(--gold);
+  }
+
+  .project-card:hover .card-expand::after {
+    transform: translateX(4px);
+  }
+
+  /* ─── FEATURED ─────────────────────────────────── */
+  #featured {
+    background: var(--bg2);
+    padding: 10vh 8vw;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 4vw;
+    margin-top: 4vh;
+  }
+
+  .featured-main {
+    background: var(--bg3);
+    border: 1px solid rgba(201,168,76,0.15);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .featured-main::after {
+    content: 'FEATURED';
+    position: absolute;
+    top: 2rem; right: -2rem;
+    font-family: var(--display);
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    writing-mode: vertical-rl;
+    opacity: 0.4;
+    z-index: 2;
+  }
+
+  .featured-main-media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg3);
+  }
+  .featured-main-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+  .featured-main:hover .featured-main-media img { transform: scale(1.03); }
+
+  .featured-main-body { padding: 3rem 3.5rem 3.5rem; }
+
+  .featured-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .featured-title {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  .featured-desc {
+    font-size: 1.02rem;
+    color: var(--cream-dim);
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  .featured-side { display: flex; flex-direction: column; gap: 2px; }
+
+  .featured-small {
+    background: var(--bg3);
+    flex: 1;
+    position: relative;
+    border: 1px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .featured-small:hover { border-color: rgba(201,168,76,0.2); background: #222218; }
+
+  .featured-small-media {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--bg3);
+  }
+  .featured-small-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .featured-small:hover .featured-small-media img { transform: scale(1.04); }
+
+  .featured-small-body { padding: 1.5rem 2rem 2rem; }
+
+  .featured-small-num {
+    font-family: var(--display);
+    font-size: 2rem;
+    color: rgba(201,168,76,0.22);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .featured-small-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  .featured-small-desc {
+    font-size: 0.82rem;
+    color: var(--cream-dim);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ─── SKILLS ───────────────────────────────────── */
+  #skills { background: var(--bg); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 4vh;
+  }
+
+  .skill-block {
+    background: var(--bg2);
+    padding: 2.5rem 2rem;
+    border: 1px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .skill-block:hover { border-color: rgba(201,168,76,0.2); background: var(--bg3); }
+
+  .skill-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .skill-name {
+    font-family: var(--display);
+    font-size: 1.4rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-desc {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── CONTACT ──────────────────────────────────── */
+  #contact {
+    background: var(--bg2);
+    text-align: center;
+    padding: 14vh 8vw;
+  }
+
+  .contact-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .contact-title {
+    font-family: var(--display);
+    font-size: clamp(3rem, 9vw, 9rem);
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 2rem;
+  }
+
+  .contact-title span { color: var(--gold); }
+
+  .contact-sub {
+    font-size: 1.05rem;
+    color: var(--cream-dim);
+    font-style: italic;
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(201,168,76,0.4);
+    padding-bottom: 0.3rem;
+    transition: color 0.2s, border-color 0.2s;
+    word-break: break-all;
+  }
+
+  .contact-link:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* ─── FOOTER ───────────────────────────────────── */
+  footer {
+    padding: 3vh 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: rgba(200,191,168,0.4);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-id {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: rgba(200,191,168,0.25);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── MODAL ────────────────────────────────────── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,4,0.92);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4vw;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(8px);
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid rgba(201,168,76,0.2);
+    max-width: 760px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 0;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal::-webkit-scrollbar { width: 4px; }
+  .modal::-webkit-scrollbar-track { background: transparent; }
+  .modal::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+  .modal-media {
+    width: 100%;
+    max-height: 46vh;
+    overflow: hidden;
+    background: var(--bg3);
+  }
+  .modal-media img { width: 100%; height: 100%; object-fit: cover; max-height: 46vh; }
+  .modal-media.empty { display: none; }
+
+  .modal-content { padding: 3rem 3.5rem; }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: rgba(10,10,8,0.8);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--cream-dim);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    cursor: none;
+    transition: color 0.2s, background 0.2s;
+    padding: 0.5rem 0.9rem;
+    z-index: 5;
+  }
+
+  .modal-close:hover { color: var(--gold); background: rgba(0,0,0,0.9); }
+
+  .modal-num {
+    font-family: var(--display);
+    font-size: 4rem;
+    color: rgba(201,168,76,0.12);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-title {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .modal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-body {
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .modal-body p + p { margin-top: 1rem; }
+
+  .modal-themes { margin-top: 2rem; }
+  .modal-themes-label {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .card-themes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .theme-tag {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    padding: 0.15rem 0.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .modal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.8rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    padding: 0.6rem 1.4rem;
+    border: 1px solid rgba(201,168,76,0.4);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .modal-link:hover { background: var(--gold); color: var(--bg); }
+
+  /* ─── SCROLL ANIMATIONS ────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ───────────────────────────────── */
+  @media (max-width: 1024px) {
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 820px) {
+    body { font-size: 17px; }
+
+    nav { padding: 1.4rem 6vw; }
+
+    /* Show hamburger, collapse desktop links */
+    .nav-toggle { display: flex; }
+    .nav-links {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(10,10,8,0.97);
+      backdrop-filter: blur(10px);
+      flex-direction: column;
+      padding: 6rem 6vw 3rem;
+      gap: 1.75rem;
+      transform: translateY(-100%);
+      transition: transform 0.35s ease;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      z-index: -1;
+    }
+    .nav-links.open { transform: translateY(0); }
+    .nav-links a { font-size: 0.75rem; }
+
+    section { padding: 8vh 6vw; }
+    #hero { padding: 0 6vw 6vh; }
+    #featured { padding: 8vh 6vw; }
+    #contact { padding: 12vh 6vw; }
+
+    #about {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .about-right { padding-top: 0; }
+
+    .projects-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .featured-grid { grid-template-columns: 1fr; gap: 2px; }
+    .featured-main-body { padding: 2.5rem 2rem; }
+
+    .hero-meta { gap: 1.75rem; }
+    .hero-meta-item { flex-basis: calc(50% - 1rem); }
+
+    .hero-number { font-size: clamp(8rem, 30vw, 16rem); right: 4vw; opacity: 0.6; }
+
+    .scroll-hint { display: none; }
+
+    footer {
+      padding: 2.5vh 6vw;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.6rem;
+      text-align: left;
+    }
+
+    .contact-links { gap: 1.5rem; flex-direction: column; }
+
+    .modal-content { padding: 2rem 1.75rem; }
+    .modal-media { max-height: 35vh; }
+    .modal-media img { max-height: 35vh; }
+    .modal { max-height: 90vh; }
+  }
+
+  @media (max-width: 520px) {
+    body { font-size: 16px; }
+
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+
+    .hero-name { font-size: clamp(3rem, 17vw, 5.5rem); }
+    .hero-meta { gap: 1.25rem 1.5rem; margin-top: 2.5rem; }
+    .hero-meta-item { flex-basis: calc(50% - 0.75rem); }
+
+    .about-stats { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    .card-body { padding: 1.5rem 1.5rem 2rem; }
+    .featured-main-body { padding: 2rem 1.5rem; }
+    .featured-small-body { padding: 1.25rem 1.5rem 1.75rem; }
+
+    .filter-bar { gap: 0.5rem; }
+    .filter-btn { padding: 0.45rem 0.8rem; font-size: 0.55rem; }
+
+    .career-goal { padding: 1.5rem 1.25rem; }
+    .career-goal::before { font-size: 6rem; top: -1.5rem; left: 0.5rem; }
+
+    .modal-content { padding: 1.75rem 1.25rem; }
+    .modal-num { font-size: 3rem; }
+
+    .contact-title { font-size: clamp(2.5rem, 13vw, 4.5rem); }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">NS — Portfolio</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-line"></div>
+  <div class="hero-number">14</div>
+  <div class="hero-tag">Film &amp; Digital Production · Spring 2026</div>
+  <h1 class="hero-name">NEHAL<br><span>SARWAR</span></h1>
+  <p class="hero-sub">Filmmaker, creator, and communicator building stories that matter — from Bangladesh to the world.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">Major<strong>Film &amp; Digital Production</strong></div>
+    <div class="hero-meta-item">Minor<strong>Business Administration</strong></div>
+    <div class="hero-meta-item">Based in<strong>Dhaka, Bangladesh</strong></div>
+    <div class="hero-meta-item">Projects<strong>14 Works</strong></div>
+  </div>
+  <div class="scroll-hint">Scroll to explore</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-left">
+    <div class="section-label">About</div>
+    <h2 class="section-title">THE<br>PERSON<br>BEHIND<br>THE LENS</h2>
+    <div class="about-text">
+      <p>A final-year student of Film &amp; Digital Production, with four years of academic work and seven years of professional creative experience — no formal design education required.</p>
+      <p>The work spans documentaries, short films, video art, installations, research, PR writing, and public speaking. All of it connects back to one drive: to use media as a vehicle for impact.</p>
+      <p>The goal isn't just to tell stories. It's to build pathways — for local talent, for global reach, for a more literate and connected Bangladesh.</p>
+    </div>
+  </div>
+  <div class="about-right reveal">
+    <div class="about-stats">
+      <div class="stat"><div class="stat-number">14</div><div class="stat-label">Projects Completed</div></div>
+      <div class="stat"><div class="stat-number">7+</div><div class="stat-label">Years in the Industry</div></div>
+      <div class="stat"><div class="stat-number">2</div><div class="stat-label">International Exhibitions</div></div>
+      <div class="stat"><div class="stat-number">4</div><div class="stat-label">Years of Academic Study</div></div>
+    </div>
+    <div class="career-goal">
+      <p>To become a changemaker in the local marketing, creator and innovation industry — and scale local talents for global competency. To create better opportunities for a decentralized Bangladesh and give back to society to change the world for good.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="margin: 0 8vw;"></div>
+
+<!-- FEATURED -->
+<section id="featured">
+  <div class="section-label">Standout Work</div>
+  <h2 class="section-title">FEATURED<br>PROJECTS</h2>
+  <div class="featured-grid reveal">
+    <div class="featured-main">
+      <div class="featured-main-media">
+        <img src="images/project-11.jpg" alt="Spray of Courage — documentary still">
+      </div>
+      <div class="featured-main-body">
+        <div class="featured-label">Project 11 — Documentary</div>
+        <h3 class="featured-title">SPRAY OF<br>COURAGE</h3>
+        <div class="card-tags" style="margin-bottom:1.5rem;">
+          <span class="tag type">Documentary Film</span>
+          <span class="tag">Summer 2025</span>
+          <span class="tag">Cinema Vérité</span>
+        </div>
+        <p class="featured-desc">A Cinema Vérité documentary following Sadman — a graffiti activist from Bangladesh's July Revolution who stayed true to the cause when others turned away. Shot with archive footage, projections, and a poetic Bengali voiceover written for the film. The most challenging and most meaningful production in the portfolio.</p>
+        <a href="https://youtu.be/qZLkIP5BNjU" target="_blank" rel="noopener" class="modal-link" style="margin-top:1.5rem;">Watch Documentary ↗</a>
+      </div>
+    </div>
+    <div class="featured-side">
+      <div class="featured-small">
+        <div class="featured-small-media">
+          <img src="images/project-06.jpg" alt="Strings of Freedom — wearable art">
+        </div>
+        <div class="featured-small-body">
+          <div class="featured-small-num">06</div>
+          <div class="featured-small-title">Strings of Freedom</div>
+          <div class="featured-small-desc">Upcycled polythene wearable art that walked in the first-ever Trashion Show. Exhibited at the British Council and selected for an exhibition in Indonesia.</div>
+        </div>
+      </div>
+      <div class="featured-small">
+        <div class="featured-small-media">
+          <img src="images/project-08.jpg" alt="The Reflection of Your Gaze — installation">
+        </div>
+        <div class="featured-small-body">
+          <div class="featured-small-num">08</div>
+          <div class="featured-small-title">The Reflection of Your Gaze</div>
+          <div class="featured-small-desc">A mirror installation at Shilpakala Academy. Those who looked at themselves saw distraction; those who looked outward saw the news. Selected for an exhibition in Indonesia.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header reveal">
+    <div>
+      <div class="section-label">All Work</div>
+      <h2 class="section-title">14<br>PROJECTS</h2>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="film">Film</button>
+      <button class="filter-btn" data-filter="research">Research</button>
+      <button class="filter-btn" data-filter="art">Art</button>
+      <button class="filter-btn" data-filter="writing">Writing</button>
+    </div>
+  </div>
+
+  <div class="projects-grid" id="projectsGrid"></div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title reveal">WHAT I<br>BRING</h2>
+  <div class="skills-grid reveal">
+    <div class="skill-block"><span class="skill-icon">🎬</span><div class="skill-name">FILMMAKING</div><div class="skill-desc">Scripting, directing, shooting, editing. From short films to documentaries, every frame is intentional.</div></div>
+    <div class="skill-block"><span class="skill-icon">📝</span><div class="skill-name">WRITING</div><div class="skill-desc">Screenplays, press releases, speeches, blogs, research proposals. Words that build worlds.</div></div>
+    <div class="skill-block"><span class="skill-icon">🎨</span><div class="skill-name">VISUAL ART</div><div class="skill-desc">Installations, video art, physical sculptures. Art that speaks beyond the screen.</div></div>
+    <div class="skill-block"><span class="skill-icon">📡</span><div class="skill-name">MEDIA STRATEGY</div><div class="skill-desc">PR writing, crisis communication, brand storytelling, and media relations in real-world settings.</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-eyebrow">Let's Connect</div>
+  <h2 class="contact-title">GET IN<br><span>TOUCH</span></h2>
+  <p class="contact-sub">Open to collaborations, creative projects, and conversations about film, media, and making things that matter.</p>
+  <div class="contact-links">
+    <a href="mailto:sarwar.nehal.msj@ulab.edu.bd" class="contact-link">sarwar.nehal.msj@ulab.edu.bd</a>
+    <a href="tel:+8801754486837" class="contact-link">+880 175 448 6837</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2026 B M Sayeed Sarwar Nehal. All rights reserved.</div>
+  <div class="footer-id">Film &amp; Digital Production · MSJ 4298</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">[ CLOSE ]</button>
+    <div class="modal-media empty" id="modalMedia"></div>
+    <div class="modal-content">
+      <div class="modal-num" id="modalNum"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-themes">
+        <div class="modal-themes-label">Key Themes</div>
+        <div class="card-themes" id="modalThemes"></div>
+      </div>
+      <div id="modalLink"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const projects = [
+  {
+    num: "01",
+    title: "AR in Social Media for Communication in Bangladesh",
+    type: "Research Proposal",
+    course: "MSJ1201 Communication Research",
+    date: "Spring 2022",
+    filter: "research",
+    image: null,
+    short: "Explored how Augmented Reality filters are reshaping brand-consumer communication — mapping the global AR boom to Bangladesh's untapped digital landscape.",
+    full: `At a time when AR filters were quietly becoming the next frontier of brand communication globally, this research proposal mapped the opportunity for Bangladesh. Co-authored with a group member, the proposal examined how brands like Nike, Adidas, and Foodpanda were leveraging AR filters on Instagram and Snapchat to drive engagement — and asked whether Bangladeshi brands were ready to follow.\n\nThe proposal outlined a full research design: an online survey among 18–35 year olds in Dhaka, combined with creating live AR filter samples around occasions like Eid to track real usage behavior. The budget, timeline, and literature review were all structured to match real-world research standards.\n\nThis was one of the first times the AR marketing conversation was being brought into an academic Bangladeshi context — written before the topic became mainstream locally.`,
+    themes: ["AR Marketing", "Digital Communication", "Consumer Behavior", "Bangladesh Media"]
+  },
+  {
+    num: "02",
+    title: "Multiculturalism: Digitalizing Indigenous Voices through Mass Media",
+    type: "Blog Writing",
+    course: "MSJ2101 Communication & Technology",
+    date: "Spring 2022",
+    filter: "writing",
+    image: "images/project-02.jpg",
+    short: "A published blog on how digital platforms and mass media can amplify the cultural identity of Bangladesh's 54+ indigenous communities — and why their underrepresentation is a systemic failure.",
+    full: `Published on Blogspot, this piece tackled a deeply rooted social issue — the systematic underrepresentation of Bangladesh's indigenous communities in mainstream media. It made the case for digital platforms as tools of cultural preservation.\n\nThe blog traced how Chakma and Tripura communities celebrate Bengali New Year in their own distinct ways (Bizu, Boushuk), and why the majority narrative in print and TV actively erases these traditions. It argued that digital access, lenient media entry, and proper representation are the three levers that can change the conversation.\n\nWritten with a journalist's eye and a cultural advocate's conviction, it remains one of the earliest pieces in the portfolio that shows the instinct to use media as a vehicle for social impact.`,
+    themes: ["Media Representation", "Indigenous Rights", "Digital Inclusion", "Cultural Diversity"],
+    link: "https://nehalsarwar.blogspot.com/2022/04/indigenous-group-nehal-sarwar-2022.html",
+    linkLabel: "Read on Blogspot"
+  },
+  {
+    num: "03",
+    title: "The King's Spectacle",
+    type: "Physical Mask & Installation",
+    course: "MSJ2201 Mass Communication",
+    date: "Spring 2025",
+    filter: "art",
+    image: "images/project-03.jpg",
+    short: "A handcrafted papier-mâché mask on a chess board — built to expose how invisible puppet masters plant and control network propaganda through strategy and dominance.",
+    full: `Built entirely by hand from papier-mâché, this mask-and-chess-board installation was created to visualize the invisible architecture of propaganda. The concept: a puppet master — the "king" — who controls the board without showing his face. The mask was painted in the colors of two dominant global powers, placed over a black-and-white chess board with pieces draped in white tissue, symbolizing the casualties of ideological manipulation.\n\nMinority region maps were embedded into the paper layers of the mask. A small live TV nearby played news clips — turning the installation into a layered, almost immersive media experience. The feedback was unanimous: direct, impactful, and three-dimensional in a way that added real weight to the message.\n\nThis project marked a significant creative shift — from screen-based work to tactile, exhibition-ready art — and proved that the strongest ideas don't always need a camera.`,
+    themes: ["Propaganda", "Network Manipulation", "3D Art", "Media Criticism"]
+  },
+  {
+    num: "04",
+    title: "The Script | Radio News Bulletin",
+    type: "Script Writing",
+    course: "GEF1202 Advanced English Writing Skills",
+    date: "Fall 2021",
+    filter: "writing",
+    image: null,
+    short: "A live-style radio news bulletin script for Radio X 88.6FM — covering real events from road accidents to Rafa Nadal's 21st Grand Slam — structured with intro, body, and outro format.",
+    full: `This project was a deep dive into the discipline of broadcast journalism — specifically the art of writing news that needs to be heard, not read. The bulletin covered a full range of real news: a microbus collision in Shatkhira, a cargo vessel accident on the Dhakatia river, the Sinha murder case verdict, Lata Mangeshkar's Covid recovery, Rafa Nadal's 21st Grand Slam win, and Omicron restriction updates.\n\nEach item had to be verified, structured with clarity, and timed for listener consumption — no room for long sentences, passive voice, or buried leads. Reporter quotes were integrated naturally to simulate a live format, complete with intro and outro music cues.\n\nThe exercise built a foundation in sourcing, verifying, and presenting information with precision — skills that quietly underpin every project that came after.`,
+    themes: ["Broadcast Writing", "News Scripting", "Radio Format", "Journalism"]
+  },
+  {
+    num: "05",
+    title: "জানা অজানা (The Known Unknown)",
+    type: "Narrative Writing",
+    course: "GEF1203 Advanced Bangla Writing Skills",
+    date: "Fall 2022",
+    filter: "writing",
+    image: null,
+    short: "A suspenseful Bangla narrative retelling Shackleton's 1914 Antarctic expedition — 497 days trapped in ice, psychological collapse, and a dramatic rescue — written with cinematic tension.",
+    full: `Given the freedom to write a narrative with a twist in Bangla, the choice landed on one of history's most extraordinary survival stories — Ernest Shackleton's 1914 Antarctic expedition aboard the Endurance. What was assigned as a language exercise became a tightly paced, suspense-driven retelling in Bangla prose.\n\nThe narrative follows Shackleton and his 28-man crew as their ship becomes trapped in Antarctic ice for nearly 497 days, the gradual psychological unraveling of the crew, the failed attempt to walk across ice, and the eventual dramatic rescue — all the way to the ship's rediscovery underwater in 2022.\n\nThe project was deliberately shaped with narrative tension and pacing — using Bangla in a way that felt accessible yet cinematic. It reflects an early, consistent interest in storytelling regardless of language, format, or medium.`,
+    themes: ["Bangla Storytelling", "Narrative Craft", "Historical Retelling", "Suspense Writing"]
+  },
+  {
+    num: "06",
+    title: "Strings of Freedom",
+    type: "Trashion Show",
+    course: "MSJ2102 Convergence Communication 1",
+    date: "Summer 2022",
+    filter: "art",
+    image: "images/project-06.jpg",
+    short: "A polythene-based upcycled fashion piece walked on the runway at the first-ever Trashion Show. Exhibited at the British Council and selected for an exhibition in Indonesia.",
+    full: `This was the most physically transformative project in the portfolio — and one of the most memorable. A full wearable outfit was designed and constructed from polythene and recycled materials, then walked on the runway in a live exhibition setting.\n\nThe concept behind Strings of Freedom was to create a circular economy for polythene waste through fashion — redirecting plastic that would otherwise pollute the environment into something visible, wearable, and conversation-starting. The piece commented on fast fashion's environmental cost while offering an aesthetic, design-led alternative.\n\nThe project earned recognition beyond the campus — showcased at the British Council and selected for an exhibition in Indonesia — making it the first project in the portfolio to reach an international audience.`,
+    themes: ["Sustainability", "Upcycled Fashion", "Environmental Communication", "Wearable Art"]
+  },
+  {
+    num: "07",
+    title: "Loop of Monotony",
+    type: "Video Art",
+    course: "MSJ2202 Convergence Communication 2",
+    date: "Fall 2024",
+    filter: "film",
+    image: "images/project-07.jpg",
+    short: "A self-written, self-shot video art piece using repetitive shots — coffee, blank notebooks, bare feet — to visualize the quiet urgency of breaking out of a creative and mental loop.",
+    full: `Before making this piece, the format of video art had to be studied, analyzed, and understood from scratch. What followed was one of the most personal projects in the portfolio — a fully self-written, self-shot, and self-edited piece that used the aesthetics of repetition to tell an internal story.\n\nThe film opens with a slow morning routine: eyes opening, bare feet on the floor, coffee being made, a blank notebook refusing to be filled. These shots repeat in a three-panel collage format, building a rhythm of monotony. Then — quietly — the changes begin. Slippers instead of bare feet. Water instead of coffee. A sentence written, a notebook closed.\n\nThe work draws from a real period of creative stagnation and the desire to break out of it, translated into a visual language that is minimalist but emotionally loaded. It was a first test of the full filmmaking pipeline — and the feedback shaped much of the work that came after.`,
+    themes: ["Video Art", "Personal Narrative", "Visual Symbolism", "Creative Direction"],
+    link: "https://youtu.be/VOkEQIm8t6o",
+    linkLabel: "Watch Video Art"
+  },
+  {
+    num: "08",
+    title: "The Reflection of Your Gaze",
+    type: "Art Installation",
+    course: "MSJ2231 Visual Communication",
+    date: "Spring 2025",
+    filter: "art",
+    image: "images/project-08.jpg",
+    short: "A mirror-based installation at Shilpakala Academy — those who looked at themselves saw distraction; those who looked outward saw the news. A quiet but precise critique of how propaganda works.",
+    full: `Exhibited at Shilpakala Academy as part of the CI Exhibition, this installation was designed around a deceptively simple question: what are you actually looking at? A mirror was placed at the center of the piece. Surrounding it, just outside the frame, was the real content — actual news, real events, the things that matter.\n\nThe concept was rooted in how propaganda works: not by hiding information entirely, but by making people comfortable inside a distraction. Visitors who stopped at the mirror saw only themselves. Those who looked past it saw the world.\n\nLike Strings of Freedom, this installation was selected for an exhibition in Indonesia — cementing a pattern of work that resonates beyond its immediate context.`,
+    themes: ["Media Propaganda", "Installation Art", "Audience Interaction", "Visual Journalism"]
+  },
+  {
+    num: "09",
+    title: "Priyo Aroni — Screenplay",
+    type: "Script Writing",
+    course: "MSJ3132 Writing for Film & Television",
+    date: "Fall 2024",
+    filter: "writing",
+    image: null,
+    short: "A melancholic Bengali-language screenplay about a single father whose daily adventures with his daughter are the only thing keeping him whole — until the final scene recontextualizes everything.",
+    full: `Written in Bengali as a final project for a course that built gradually from loglines toward full scripts, Priyo Aroni is a slow-burn emotional drama told through small, tender moments between a father and his daughter.\n\nTamal is a man carrying invisible grief. His marriage ended. His world reduced to the daily ritual of picking Aroni up from school and turning every afternoon into a small adventure — buying a turtle, eating oranges by Dhanmondi Lake, laughing at nothing in particular. The audience is led to believe this is a love story. Until the final scene reveals a hospital report, recontextualizing every moment that came before.\n\nThe script uses deliberate camera directions, defocus techniques, and repeated scene structures to build its emotional architecture. It was later produced as a short film — one of the few projects that completed the full journey from page to screen.`,
+    themes: ["Screenwriting", "Emotional Storytelling", "Bengali Cinema", "Character-driven Drama"]
+  },
+  {
+    num: "10",
+    title: "Golokdhada Music Video",
+    type: "Music Video",
+    course: "MSJ3231 Digital Cinematography",
+    date: "Summer 2024",
+    filter: "film",
+    image: "images/project-10.jpg",
+    short: "A visually cohesive music video for Kaaktaal's Golokdhada — built around a personal moodboard with moody, grounded cinematography and complete creative ownership from first frame to last.",
+    full: `This project was a pure exercise in cinematographic ownership — choosing a song that genuinely meant something, building a visual world around it, and executing it with intention from the first frame to the last.\n\nThe song Golokdhada by Kaaktaal was chosen for its raw, unfiltered tone and alignment with the semester's CI theme. Every shot was planned around a specific moodboard, prioritizing atmosphere, lighting, and visual consistency over conventional music video logic. The process demanded thinking like a pure cinematographer — considering not just what to shoot, but how each frame would feel.\n\nThe result is a visually cohesive piece that reflects a distinct personal aesthetic: moody, grounded, and emotionally textured. It was the first project where style and taste were placed fully at the center.`,
+    themes: ["Cinematography", "Music Video", "Visual Storytelling", "Moodboard Direction"],
+    link: "https://youtu.be/jzlyw4FObNU",
+    linkLabel: "Watch Music Video"
+  },
+  {
+    num: "11",
+    title: "Spray of Courage",
+    type: "Documentary Film",
+    course: "MSJ4131 Documentary Production",
+    date: "Summer 2025",
+    filter: "film",
+    image: "images/project-11.jpg",
+    short: "A Cinema Vérité documentary about Sadman — a graffiti activist from Bangladesh's July Revolution who kept standing for the right cause long after the cameras left.",
+    full: `Some stories don't find you in a classroom — they find you on the streets. Spray of Courage is a documentary about Sadman, a graffiti artist and activist who stood in the front lines of Bangladesh's July Revolution and kept standing long after others turned away.\n\nShot using Cinema Vérité techniques, the film blends archive footage from the revolution with intimate present-day sequences. A poetic Bengali voiceover — written and recorded as part of production — narrates the gap between the revolution's promise and its aftermath: who stayed true to the cause and who quietly moved on.\n\nThe documentary was referenced against The Square (2013) by Jehane Noujaim and Al Jazeera's 36 Days in July — two benchmarks of politically engaged documentary filmmaking. It was the most challenging production in the portfolio, logistically and emotionally, and the most meaningful to complete.`,
+    themes: ["Documentary", "Social Justice", "July Revolution", "Cinema Vérité"],
+    link: "https://youtu.be/qZLkIP5BNjU",
+    linkLabel: "Watch Documentary"
+  },
+  {
+    num: "12",
+    title: "Priyo Aroni — Short Film",
+    type: "Short Film",
+    course: "MSJ4132 Fictional Narrative Production",
+    date: "Summer 2024",
+    filter: "film",
+    image: "images/project-12.jpg",
+    short: "Written, directed, and produced in full — a short film about a father holding on to his daughter's memory through imagined daily adventures. The most complete creative undertaking in the portfolio.",
+    full: `The screenplay became a film. Priyo Aroni was written, directed, cast, shot, and edited as a complete fictional narrative production — the most comprehensive single creative undertaking in the entire portfolio.\n\nThe film tackles a subject rarely addressed in Bangladeshi popular fiction: a parent dealing with the loss of a child, and the coping mechanism of holding on through imagined daily routines. Every visual choice — defocused flashbacks, slow-motion shots of oranges being peeled, city crowds framing two figures who are never quite alone — was built to serve the emotional architecture of the story.\n\nCasting, location management, and assembling a crew all came with their own challenges. But completing the film exactly as envisioned — from storyboard to final cut — stands as a marker of what four years of learning made possible.`,
+    themes: ["Short Film", "Direction", "Fictional Narrative", "Emotional Filmmaking"],
+    link: "https://youtu.be/AO5uJbZkHFo",
+    linkLabel: "Watch Short Film"
+  },
+  {
+    num: "13",
+    title: "Augmedix: Cybersecurity & Crisis Communication",
+    type: "Press Release + Analytical Report",
+    course: "MSJ3142 Media Relations",
+    date: "Fall 2025",
+    filter: "research",
+    image: null,
+    short: "A live interview with an Augmedix People Partner turned into a professional press release and analytical report on how a HIPAA-compliant healthcare tech company handles real-world crises.",
+    full: `This project required stepping out of the usual creative comfort zone and into the precise, high-stakes world of professional communications. A live recorded interview was conducted with Iqra Ahmed, People Partner and Employer Branding specialist at Augmedix — a HIPAA-compliant healthcare technology company in Bangladesh serving the U.S. healthcare market.\n\nThe interview explored three crisis scenarios: discrimination and harassment allegations, cybersecurity threats, and misinformation attacks. From those insights, an analytical group report and a standalone press release were produced — both adhering strictly to professional PR standards.\n\nThe process revealed something important: a good press release isn't just well-written — it's built on verified sourcing, strategic framing, and a clear understanding of what an organization's stakeholders actually need to hear.`,
+    themes: ["PR Writing", "Crisis Communication", "Healthcare Industry", "Professional Journalism"]
+  },
+  {
+    num: "14",
+    title: "The Missing Foundation: Why Bangladesh Needs a Recognized Design Education System",
+    type: "Speech Writing & Public Speaking",
+    course: "MSJ3243 Speech Writing & Public Speaking",
+    date: "Fall 2025",
+    filter: "writing",
+    image: "images/project-14.jpg",
+    short: "A speech and report arguing that Bangladesh's creative industry — built on intuition, not education — needs systemic academic reform. Written from 7 years of professional experience inside the system.",
+    full: `Seven years of working professionally in Bangladesh's creative industry — without a single day of formal design education — gave this speech its core material. It wasn't research conducted from the outside. It was a case made from the inside.\n\nThe speech argues that Bangladesh's creative sector — serving telecom, FMCG, tech, fashion, and NGOs — is built on a foundation that doesn't exist. With roughly 85% of creative professionals having no formal training, and only one recognized institution offering anything close to design education, an entire industry runs on intuition rather than structure.\n\nThe speech draws on ethos (personal experience managing creative teams), logos (international comparisons with the UK, Germany, South Korea), and pathos (the talent that burns out or leaves the country). It doesn't ask for design schools overnight — it asks for design thinking to be recognized as infrastructure, not decoration.`,
+    themes: ["Design Education", "Public Speaking", "Industry Advocacy", "Creative Economy"],
+    link: "https://youtu.be/PwZ7LSnRA0g",
+    linkLabel: "Watch Speech"
+  }
+];
+
+// Render projects
+const grid = document.getElementById('projectsGrid');
+projects.forEach((p, i) => {
+  const card = document.createElement('div');
+  card.className = 'project-card reveal';
+  card.dataset.filter = p.filter;
+  card.style.transitionDelay = `${(i % 3) * 0.08}s`;
+
+  const mediaHtml = p.image
+    ? `<div class="card-media"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>`
+    : `<div class="card-media placeholder"><div class="ph-num">${p.num}</div></div>`;
+
+  card.innerHTML = `
+    ${mediaHtml}
+    <div class="card-body">
+      <div class="card-number">${p.num}</div>
+      <div class="card-tags">
+        <span class="tag type">${p.type}</span>
+        <span class="tag">${p.date}</span>
+      </div>
+      <div class="card-title">${p.title}</div>
+      <div class="card-course">${p.course}</div>
+      <div class="card-desc">${p.short}</div>
+      <button class="card-expand" data-idx="${i}">Read More</button>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+
+// Card click opens modal (works for entire card on touch)
+grid.addEventListener('click', e => {
+  const card = e.target.closest('.project-card');
+  if (!card) return;
+  const btn = card.querySelector('.card-expand');
+  if (btn) openModal(parseInt(btn.dataset.idx, 10));
+});
+
+// Filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(card => {
+      if (filter === 'all' || card.dataset.filter === filter) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+});
+
+// Modal
+function openModal(i) {
+  const p = projects[i];
+  const modalMedia = document.getElementById('modalMedia');
+  if (p.image) {
+    modalMedia.innerHTML = `<img src="${p.image}" alt="${p.title}">`;
+    modalMedia.classList.remove('empty');
+  } else {
+    modalMedia.innerHTML = '';
+    modalMedia.classList.add('empty');
+  }
+  document.getElementById('modalNum').textContent = p.num;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalMeta').innerHTML = `
+    <span class="tag type">${p.type}</span>
+    <span class="tag">${p.date}</span>
+    <span class="tag">${p.course}</span>
+  `;
+  document.getElementById('modalBody').innerHTML = p.full.split('\n\n').map(par => `<p>${par}</p>`).join('');
+  document.getElementById('modalThemes').innerHTML = p.themes.map(t => `<span class="theme-tag">${t}</span>`).join('');
+  document.getElementById('modalLink').innerHTML = p.link
+    ? `<a href="${p.link}" target="_blank" rel="noopener" class="modal-link">${p.linkLabel} ↗</a>` : '';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  const open = navLinks.classList.toggle('open');
+  navToggle.classList.toggle('open', open);
+  navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Custom cursor — only on devices with fine pointer (desktop)
+const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const cursor = document.getElementById('cursor');
+if (canHover) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .project-card, .featured-small, .featured-main').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+  });
+} else {
+  cursor.style.display = 'none';
+}
+</script>
+</body>
+</html>
