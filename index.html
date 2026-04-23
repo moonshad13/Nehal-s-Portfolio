@@ -887,6 +887,69 @@
   .modal-media img { width: 100%; height: 100%; object-fit: cover; max-height: 46vh; }
   .modal-media.empty { display: none; }
 
+  /* Modal slideshow (when project has a gallery of multiple images) */
+  .modal-media.has-slideshow {
+    height: 46vh;
+    max-height: 46vh;
+    position: relative;
+  }
+  .modal-slides {
+    position: absolute;
+    inset: 0;
+  }
+  .modal-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .modal-slide.active { opacity: 1; }
+  .modal-slide img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(10,10,8,0.75);
+    border: 1px solid rgba(201,168,76,0.35);
+    color: var(--cream);
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: none;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .modal-arrow:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+  .modal-arrow.prev { left: 1rem; }
+  .modal-arrow.next { right: 1rem; }
+  .modal-dots {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 4;
+  }
+  .modal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(240, 234, 214, 0.35);
+    border: none;
+    cursor: none;
+    padding: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .modal-dot:hover { background: rgba(240, 234, 214, 0.6); }
+  .modal-dot.active { background: var(--gold); transform: scale(1.25); }
+
   .modal-content { padding: 3rem 3.5rem; }
 
   .modal-close {
@@ -1070,6 +1133,7 @@
 
     .modal-content { padding: 2rem 1.75rem; }
     .modal-media { max-height: 35vh; }
+    .modal-media.has-slideshow { height: 35vh; max-height: 35vh; }
     .modal-media img { max-height: 35vh; }
     .modal { max-height: 90vh; }
   }
@@ -1101,6 +1165,9 @@
 
     .modal-content { padding: 1.75rem 1.25rem; }
     .modal-num { font-size: 3rem; }
+    .modal-arrow { width: 32px; height: 32px; font-size: 1.1rem; }
+    .modal-arrow.prev { left: 0.5rem; }
+    .modal-arrow.next { right: 0.5rem; }
 
     .contact-title { font-size: clamp(2.5rem, 13vw, 4.5rem); }
   }
@@ -1352,6 +1419,7 @@ const projects = [
     date: "Summer 2022",
     filter: "art",
     image: "images/Strings of Freedom 1.jpeg",
+    gallery:["images/Strings of Freedom 2.jpeg","images/Strings of Freedom 3.jpeg"],
     short: "A polythene-based upcycled fashion piece walked on the runway at the first-ever Trashion Show. Exhibited at the British Council and selected for an exhibition in Indonesia.",
     full: `This was the most physically transformative project in the portfolio — and one of the most memorable. A full wearable outfit was designed and constructed from polythene and recycled materials, then walked on the runway in a live exhibition setting.\n\nThe concept behind Strings of Freedom was to create a circular economy for polythene waste through fashion — redirecting plastic that would otherwise pollute the environment into something visible, wearable, and conversation-starting. The piece commented on fast fashion's environmental cost while offering an aesthetic, design-led alternative.\n\nThe project earned recognition beyond the campus — showcased at the British Council and selected for an exhibition in Indonesia — making it the first project in the portfolio to reach an international audience.`,
     themes: ["Sustainability", "Upcycled Fashion", "Environmental Communication", "Wearable Art"]
@@ -1364,6 +1432,7 @@ const projects = [
     date: "Fall 2024",
     filter: "film",
     image: "images/Loop of Monatomy 1.png",
+    gallery:["images/Loop of Monatomy 2.png"],
     short: "A self-written, self-shot video art piece using repetitive shots — coffee, blank notebooks, bare feet — to visualize the quiet urgency of breaking out of a creative and mental loop.",
     full: `Before making this piece, the format of video art had to be studied, analyzed, and understood from scratch. What followed was one of the most personal projects in the portfolio — a fully self-written, self-shot, and self-edited piece that used the aesthetics of repetition to tell an internal story.\n\nThe film opens with a slow morning routine: eyes opening, bare feet on the floor, coffee being made, a blank notebook refusing to be filled. These shots repeat in a three-panel collage format, building a rhythm of monotony. Then — quietly — the changes begin. Slippers instead of bare feet. Water instead of coffee. A sentence written, a notebook closed.\n\nThe work draws from a real period of creative stagnation and the desire to break out of it, translated into a visual language that is minimalist but emotionally loaded. It was a first test of the full filmmaking pipeline — and the feedback shaped much of the work that came after.`,
     themes: ["Video Art", "Personal Narrative", "Visual Symbolism", "Creative Direction"],
@@ -1378,6 +1447,7 @@ const projects = [
     date: "Spring 2025",
     filter: "art",
     image: "images/The reflection of your gaze_1.jpeg",
+    gallery:["images/The reflection of your gaze_2.jpeg","images/The reflection of your gaze_3.jpeg","images/The reflection of your gaze_4.jpeg","images/The reflection of your gaze_5.jpeg"],
     short: "A mirror-based installation at Shilpakala Academy — those who looked at themselves saw distraction; those who looked outward saw the news. A quiet but precise critique of how propaganda works.",
     full: `Exhibited at Shilpakala Academy as part of the CI Exhibition, this installation was designed around a deceptively simple question: what are you actually looking at? A mirror was placed at the center of the piece. Surrounding it, just outside the frame, was the real content — actual news, real events, the things that matter.\n\nThe concept was rooted in how propaganda works: not by hiding information entirely, but by making people comfortable inside a distraction. Visitors who stopped at the mirror saw only themselves. Those who looked past it saw the world.\n\nLike Strings of Freedom, this installation was selected for an exhibition in Indonesia — cementing a pattern of work that resonates beyond its immediate context.`,
     themes: ["Media Propaganda", "Installation Art", "Audience Interaction", "Visual Journalism"]
@@ -1402,6 +1472,7 @@ const projects = [
     date: "Summer 2024",
     filter: "film",
     image: "images/Golokdhada 1.png",
+    gallery:["images/Golokdhada 2.png"],
     short: "A visually cohesive music video for Kaaktaal's Golokdhada — built around a personal moodboard with moody, grounded cinematography and complete creative ownership from first frame to last.",
     full: `This project was a pure exercise in cinematographic ownership — choosing a song that genuinely meant something, building a visual world around it, and executing it with intention from the first frame to the last.\n\nThe song Golokdhada by Kaaktaal was chosen for its raw, unfiltered tone and alignment with the semester's CI theme. Every shot was planned around a specific moodboard, prioritizing atmosphere, lighting, and visual consistency over conventional music video logic. The process demanded thinking like a pure cinematographer — considering not just what to shoot, but how each frame would feel.\n\nThe result is a visually cohesive piece that reflects a distinct personal aesthetic: moody, grounded, and emotionally textured. It was the first project where style and taste were placed fully at the center.`,
     themes: ["Cinematography", "Music Video", "Visual Storytelling", "Moodboard Direction"],
@@ -1416,6 +1487,7 @@ const projects = [
     date: "Summer 2025",
     filter: "film",
     image: "images/Spray of Courage 1.png",
+    gallery:["images/Spray of Courage 2.png","images/Spray of Courage 3.png"],
     short: "A Cinema Vérité documentary about Sadman — a graffiti activist from Bangladesh's July Revolution who kept standing for the right cause long after the cameras left.",
     full: `Some stories don't find you in a classroom — they find you on the streets. Spray of Courage is a documentary about Sadman, a graffiti artist and activist who stood in the front lines of Bangladesh's July Revolution and kept standing long after others turned away.\n\nShot using Cinema Vérité techniques, the film blends archive footage from the revolution with intimate present-day sequences. A poetic Bengali voiceover — written and recorded as part of production — narrates the gap between the revolution's promise and its aftermath: who stayed true to the cause and who quietly moved on.\n\nThe documentary was referenced against The Square (2013) by Jehane Noujaim and Al Jazeera's 36 Days in July — two benchmarks of politically engaged documentary filmmaking. It was the most challenging production in the portfolio, logistically and emotionally, and the most meaningful to complete.`,
     themes: ["Documentary", "Social Justice", "July Revolution", "Cinema Vérité"],
@@ -1430,6 +1502,7 @@ const projects = [
     date: "Summer 2024",
     filter: "film",
     image: "images/Priyo Auroni 1.png",
+    gallery:["images/Priyo Auroni 2.png","images/Priyo Auroni 3.png"],
     short: "Written, directed, and produced in full — a short film about a father holding on to his daughter's memory through imagined daily adventures. The most complete creative undertaking in the portfolio.",
     full: `The screenplay became a film. Priyo Aroni was written, directed, cast, shot, and edited as a complete fictional narrative production — the most comprehensive single creative undertaking in the entire portfolio.\n\nThe film tackles a subject rarely addressed in Bangladeshi popular fiction: a parent dealing with the loss of a child, and the coping mechanism of holding on through imagined daily routines. Every visual choice — defocused flashbacks, slow-motion shots of oranges being peeled, city crowds framing two figures who are never quite alone — was built to serve the emotional architecture of the story.\n\nCasting, location management, and assembling a crew all came with their own challenges. But completing the film exactly as envisioned — from storyboard to final cut — stands as a marker of what four years of learning made possible.`,
     themes: ["Short Film", "Direction", "Fictional Narrative", "Emotional Filmmaking"],
@@ -1521,12 +1594,61 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 function openModal(i) {
   const p = projects[i];
   const modalMedia = document.getElementById('modalMedia');
-  if (p.image) {
-    modalMedia.innerHTML = `<img src="${p.image}" alt="${p.title}">`;
-    modalMedia.classList.remove('empty');
-  } else {
+  const allImages = p.image ? [p.image, ...(p.gallery || [])] : [];
+
+  // Reset any prior slideshow state from a previously-opened project
+  modalMedia.classList.remove('has-slideshow');
+  modalMedia._prev = null;
+  modalMedia._next = null;
+
+  if (allImages.length === 0) {
     modalMedia.innerHTML = '';
     modalMedia.classList.add('empty');
+  } else if (allImages.length === 1) {
+    modalMedia.innerHTML = `<img src="${allImages[0]}" alt="${p.title}">`;
+    modalMedia.classList.remove('empty');
+  } else {
+    modalMedia.classList.remove('empty');
+    modalMedia.classList.add('has-slideshow');
+    const slidesHtml = allImages.map((src, idx) =>
+      `<div class="modal-slide${idx === 0 ? ' active' : ''}"><img src="${src}" alt="${p.title}"></div>`
+    ).join('');
+    const dotsHtml = allImages.map((_, idx) =>
+      `<button class="modal-dot${idx === 0 ? ' active' : ''}" data-slide="${idx}" aria-label="Slide ${idx + 1}"></button>`
+    ).join('');
+    modalMedia.innerHTML = `
+      <div class="modal-slides">${slidesHtml}</div>
+      <button class="modal-arrow prev" aria-label="Previous">‹</button>
+      <button class="modal-arrow next" aria-label="Next">›</button>
+      <div class="modal-dots">${dotsHtml}</div>
+    `;
+
+    let current = 0;
+    const slides = modalMedia.querySelectorAll('.modal-slide');
+    const dots = modalMedia.querySelectorAll('.modal-dot');
+    const showSlide = (idx) => {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    };
+    modalMedia._prev = () => showSlide(current - 1);
+    modalMedia._next = () => showSlide(current + 1);
+    modalMedia.querySelector('.modal-arrow.prev').addEventListener('click', (e) => {
+      e.stopPropagation();
+      modalMedia._prev();
+    });
+    modalMedia.querySelector('.modal-arrow.next').addEventListener('click', (e) => {
+      e.stopPropagation();
+      modalMedia._next();
+    });
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showSlide(parseInt(dot.dataset.slide));
+      });
+    });
   }
   document.getElementById('modalNum').textContent = p.num;
   document.getElementById('modalTitle').textContent = p.title;
@@ -1551,7 +1673,13 @@ function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); return; }
+  if (!document.getElementById('modalOverlay').classList.contains('open')) return;
+  const media = document.getElementById('modalMedia');
+  if (e.key === 'ArrowLeft' && media._prev) media._prev();
+  if (e.key === 'ArrowRight' && media._next) media._next();
+});
 
 // Mobile nav toggle
 const navToggle = document.getElementById('navToggle');
